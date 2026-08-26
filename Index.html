@@ -299,6 +299,11 @@ h1 .amp{font-style:italic;color:var(--muted);font-weight:500}
       <span class="it"><span class="sw" style="background:var(--all)"></span>Cross-platform · “All” (FIX/API migrations)</span>
     </div>
     <div class="col">
+      <span class="lh">Buy vs Sell</span>
+      <span class="it"><b style="color:var(--ink);font-weight:600">Sell-side (IB)</b>&nbsp;— env “All”, or client name ending “IB”</span>
+      <span class="it"><b style="color:var(--ink);font-weight:600">Buy-side</b>&nbsp;— every other client (specific environments)</span>
+    </div>
+    <div class="col">
       <span class="lh">Go-live timing (vs today)</span>
       <span class="it"><span class="status pass"><span class="d"></span>Passed</span> target date already reached</span>
       <span class="it"><span class="status soon"><span class="d"></span>Next 2 weeks</span> imminent</span>
@@ -329,6 +334,17 @@ const CATDESC={
 };
 const CATORDER=["cmn","ded","dia","all"];
 
+// ─── Buy-side vs Sell-side (IB) ──────────────────────────────────────────────
+// Rule (matches how the desk works):
+//   • env "All"  = platform-wide IB / sell-side migrations — never buy-side.
+//   • client name ending in "IB" = an investment bank (sell-side).
+//   • everything else = a buy-side distributor / private bank.
+function sideOf(env, client){
+  if((env||'').trim().toLowerCase()==='all') return 'sell';
+  if(/(^|\s)IB$/.test((client||'').trim())) return 'sell';
+  return 'buy';
+}
+
 // ─── REGION CONFIG (add new regions here) ───────────────────────────────────
 // REGION_ORDER  = the order desks appear in tiles / filters / legend.
 // REGION_NAMES  = code → full label shown on tiles and legend.
@@ -356,7 +372,7 @@ const RAW = <?!= data ?>;
 
 function buildData(raw){ return raw.map((r,i)=>{
   const uat=pd(r[5]), live=pd(r[6]);
-  return {id:i, region:r[0], client:r[1], env:r[2], envCat:envCat(r[2]),
+  return {id:i, region:r[0], client:r[1], env:r[2], envCat:envCat(r[2]), side:sideOf(r[2],r[1]),
     asset:r[3], project:r[4], uat, live, uatRaw:r[5], liveRaw:r[6],
     poc:r[7], pune:r[8],
     monthKey: live.getFullYear()+"-"+String(live.getMonth()).padStart(2,"0"),
@@ -393,7 +409,7 @@ function renderRegSeg(){
 function renderKPIs(){
   const f=filtered();
   const tot=f.length;
-  const clients=new Set(f.map(d=>d.region+"|"+d.client)).size;
+  const buy=f.filter(d=>d.side==="buy").length, sell=f.filter(d=>d.side==="sell").length;
   const passed=f.filter(d=>statusOf(d)==="pass").length;
   const mc={}; f.forEach(d=>mc[d.monthKey]=(mc[d.monthKey]||0)+1);
   let peak="—",peakN=0; Object.entries(mc).forEach(([k,v])=>{if(v>peakN){peakN=v;peak=k;}});
@@ -403,8 +419,10 @@ function renderKPIs(){
   REGIONS.forEach(r=>{ const c=f.filter(d=>d.region===r).length, col=regColor(r);
     h+=`<div class="kpi"><div class="n mono" style="color:${col}">${c}</div><div class="l">${regName(r)}</div>
       <div class="rail"><span style="width:${tot?c/tot*100:0}%;background:${col}"></span></div></div>`; });
-  h+=`<div class="kpi"><div class="n mono">${clients}</div><div class="l">Distinct clients</div>
-      <div class="rail"><span style="width:100%;background:var(--ded)"></span></div></div>
+  h+=`<div class="kpi"><div class="n mono">${buy}</div><div class="l">Buy-side</div>
+      <div class="rail"><span style="width:${tot?buy/tot*100:0}%;background:var(--sched)"></span></div></div>
+    <div class="kpi"><div class="n mono">${sell}</div><div class="l">Sell-side (IB)</div>
+      <div class="rail"><span style="width:${tot?sell/tot*100:0}%;background:var(--dia)"></span></div></div>
     <div class="kpi"><div class="n mono">${passed}</div><div class="l">Go-lives passed</div>
       <div class="rail"><span style="width:${tot?passed/tot*100:0}%;background:var(--pass)"></span></div></div>
     <div class="kpi"><div class="n mono" style="font-size:19px;padding-top:4px">${pl}</div><div class="l">Busiest month · ${peakN} go-lives</div>
