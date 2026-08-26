@@ -1,7 +1,8 @@
 /**
  * APAC Release Calendar — live web app
- * Reads the HK and SG tabs of THIS spreadsheet every time the page loads,
- * so the dashboard always reflects the current sheet.
+ * Reads the HK and SG tabs of a spreadsheet every time the page loads, so the
+ * dashboard always reflects the current sheet. By default it reads the sheet this
+ * script is bound to; set SHEET_ID below to point it at a different spreadsheet.
  *
  * Scope rules (match the dashboard):
  *   - Only tabs that have an "HK POC" or "SG POC" column are used
@@ -10,6 +11,23 @@
  *   - SG: only rows whose "Asset Class" contains "EQD".
  *   - Rows with no client or no Live Target date are ignored.
  */
+
+// ─── CONFIG: which spreadsheet to read ──────────────────────────────────────
+// Leave BLANK ('') to read the sheet this script is bound to
+//   (i.e. the sheet you opened via Extensions → Apps Script).
+// To read a DIFFERENT sheet, paste its ID between the quotes. The ID is the long
+// string in the sheet URL, between /d/ and /edit:
+//   https://docs.google.com/spreadsheets/d/THIS_IS_THE_ID/edit
+// The other sheet must use the same column headers, and the account running this
+// web app (Execute as: Me) must have at least view access to it.
+var SHEET_ID = '';
+// ────────────────────────────────────────────────────────────────────────────
+
+function getSpreadsheet_() {
+  return SHEET_ID
+    ? SpreadsheetApp.openById(SHEET_ID)
+    : SpreadsheetApp.getActiveSpreadsheet();
+}
 
 var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
@@ -31,7 +49,7 @@ function fmtCell(v) {
 }
 
 function getReleaseData() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = getSpreadsheet_();
   var rows = [];
 
   ss.getSheets().forEach(function (sheet) {
