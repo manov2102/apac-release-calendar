@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>APAC Release Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --bg:#EFF2F6; --surface:#FFFFFF; --surface-2:#F6F8FB; --surface-3:#EEF2F7;
+  --border:#DCE2EA; --border-strong:#C7D0DB;
+  --ink:#141B24; --muted:#59636F; --faint:#8A94A1;
+  --accent:#173A5A;
+  --hk:#B23A32; --hk-soft:rgba(178,58,50,.10);
+  --sg:#0C7C7C; --sg-soft:rgba(12,124,124,.10);
+  --pass:#5C6672; --pass-soft:rgba(92,102,114,.12);
+  --soon:#B26B12; --soon-soft:rgba(178,107,18,.14);
+  --sched:#3550C4; --sched-soft:rgba(53,80,196,.10);
+  /* env chips */
+  --cmn:#3550C4;   --cmn-bg:rgba(53,80,196,.11);
+  --ded:#4C6076;   --ded-bg:rgba(76,96,118,.12);
+  --dia:#7E43A6;   --dia-bg:rgba(126,67,166,.12);
+  --all:#A66A16;   --all-bg:rgba(166,106,22,.13);
+  --shadow:0 1px 2px rgba(20,27,36,.04),0 8px 24px -12px rgba(20,27,36,.18);
+  --shadow-sm:0 1px 2px rgba(20,27,36,.05);
+}
+:root:not([data-theme="light"]){
+  @media (prefers-color-scheme: dark){
+    --bg:#0C1015; --surface:#141B24; --surface-2:#182029; --surface-3:#1E2731;
+    --border:#26313D; --border-strong:#323F4D;
+    --ink:#E7ECF2; --muted:#9BA6B3; --faint:#6C7885;
+    --accent:#8FB4D6;
+    --hk:#E4756B; --hk-soft:rgba(228,117,107,.14);
+    --sg:#3DB3B0; --sg-soft:rgba(61,179,176,.14);
+    --pass:#8A94A1; --pass-soft:rgba(138,148,161,.16);
+    --soon:#E0A85C; --soon-soft:rgba(224,168,92,.16);
+    --sched:#8FA2F0; --sched-soft:rgba(143,162,240,.14);
+    --cmn:#8FA2F0; --cmn-bg:rgba(90,120,230,.16);
+    --ded:#AAB8C7; --ded-bg:rgba(130,150,175,.15);
+    --dia:#C79BE0; --dia-bg:rgba(150,100,185,.17);
+    --all:#E0B061; --all-bg:rgba(200,150,60,.16);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.6);
+    --shadow-sm:0 1px 2px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C1015; --surface:#141B24; --surface-2:#182029; --surface-3:#1E2731;
+  --border:#26313D; --border-strong:#323F4D;
+  --ink:#E7ECF2; --muted:#9BA6B3; --faint:#6C7885;
+  --accent:#8FB4D6;
+  --hk:#E4756B; --hk-soft:rgba(228,117,107,.14);
+  --sg:#3DB3B0; --sg-soft:rgba(61,179,176,.14);
+  --pass:#8A94A1; --pass-soft:rgba(138,148,161,.16);
+  --soon:#E0A85C; --soon-soft:rgba(224,168,92,.16);
+  --sched:#8FA2F0; --sched-soft:rgba(143,162,240,.14);
+  --cmn:#8FA2F0; --cmn-bg:rgba(90,120,230,.16);
+  --ded:#AAB8C7; --ded-bg:rgba(130,150,175,.15);
+  --dia:#C79BE0; --dia-bg:rgba(150,100,185,.17);
+  --all:#E0B061; --all-bg:rgba(200,150,60,.16);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.6);
+  --shadow-sm:0 1px 2px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;
+}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+
+/* ---- Masthead ---- */
+.mast{padding:30px 0 20px;border-bottom:1px solid var(--border)}
+.mast-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+.eyebrow{font-size:11px;letter-spacing:.19em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 6px}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-weight:600;font-size:clamp(26px,4vw,38px);line-height:1.08;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1 .amp{font-style:italic;color:var(--muted);font-weight:500}
+.sub{color:var(--muted);margin:9px 0 0;font-size:14px;max-width:60ch}
+.asof{text-align:right;flex-shrink:0}
+.asof .lab{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:600}
+.asof .val{font-size:15px;font-weight:500;margin-top:2px}
+.asof-btns{display:flex;gap:8px;margin-top:12px;justify-content:flex-end;flex-wrap:wrap}
+.theme-btn{background:var(--surface-2);border:1px solid var(--border);color:var(--muted);
+  border-radius:8px;padding:7px 12px;font-size:12px;font-weight:500;cursor:pointer;display:inline-flex;gap:6px;align-items:center;font-family:inherit}
+.theme-btn:hover{border-color:var(--border-strong);color:var(--ink)}
+.theme-btn:disabled{opacity:.6;cursor:default}
+.theme-btn svg{flex-shrink:0}
+
+/* ---- KPI strip ---- */
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:22px 0 4px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 15px;box-shadow:var(--shadow-sm)}
+.kpi .n{font-family:"IBM Plex Mono";font-weight:600;font-size:25px;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:11px;color:var(--muted);margin-top:7px;letter-spacing:.02em}
+.kpi.hk .n{color:var(--hk)} .kpi.sg .n{color:var(--sg)}
+.kpi .rail{height:3px;border-radius:2px;margin-top:10px;background:var(--surface-3);overflow:hidden}
+.kpi .rail span{display:block;height:100%}
+
+/* ---- Controls ---- */
+.controls{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--border);margin-top:20px}
+.controls-in{display:flex;gap:14px 22px;align-items:center;flex-wrap:wrap;padding:12px 0}
+.cgroup{display:flex;align-items:center;gap:8px}
+.clabel{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:600}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:3px}
+.seg button{border:0;background:transparent;color:var(--muted);font-family:inherit;font-size:12.5px;font-weight:500;
+  padding:5px 12px;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.seg button:hover{color:var(--ink)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-sm);font-weight:600}
+.seg button .dot{width:8px;height:8px;border-radius:50%}
+.seg button.on.hk{color:var(--hk)} .seg button.on.sg{color:var(--sg)}
+.search{flex:1;min-width:180px;max-width:280px;margin-left:auto}
+.search input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:9px;
+  padding:8px 12px;color:var(--ink);font-family:inherit;font-size:13px}
+.search input::placeholder{color:var(--faint)}
+.search input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.chipf{border:1px solid var(--border);background:var(--surface-2);color:var(--muted);border-radius:20px;
+  padding:5px 12px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:7px}
+.chipf .sw{width:9px;height:9px;border-radius:3px}
+.chipf:hover{border-color:var(--border-strong);color:var(--ink)}
+.chipf.on{color:var(--ink);border-color:var(--border-strong);background:var(--surface)}
+
+/* ---- Chart ---- */
+.section-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:26px 0 12px}
+.section-h h2{font-family:"IBM Plex Serif";font-weight:500;font-size:17px;margin:0;letter-spacing:-.01em}
+.section-h .hint{font-size:12px;color:var(--faint)}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px 14px;box-shadow:var(--shadow-sm)}
+.chart{display:flex;align-items:stretch;gap:min(2.4vw,26px);height:190px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;min-width:0}
+.bar-tot{font-family:"IBM Plex Mono";font-weight:600;font-size:13px;font-variant-numeric:tabular-nums;line-height:1;margin-bottom:5px;flex-shrink:0}
+.bar-area{flex:1;width:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;min-height:0}
+.bar-stack{width:100%;max-width:56px;display:flex;flex-direction:column-reverse;border-radius:6px 6px 3px 3px;overflow:hidden;position:relative;transition:height .5s cubic-bezier(.4,0,.2,1)}
+.bar-col:hover .bar-stack{filter:brightness(1.08)}
+.bar-seg{width:100%}
+.bar-seg.hk{background:var(--hk)} .bar-seg.sg{background:var(--sg)}
+.bar-x{font-size:11px;color:var(--muted);text-align:center;line-height:1.25;flex-shrink:0}
+.bar-x b{display:block;color:var(--ink);font-weight:600;font-size:11.5px}
+.bar-col.dim{opacity:.32}
+.bar-col.sel .bar-x b{color:var(--accent)}
+
+/* ---- Groups & rows ---- */
+.grp{margin-top:24px}
+.grp-h{display:flex;align-items:center;gap:12px;padding:0 4px 10px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.grp-h .title{font-family:"IBM Plex Serif";font-size:16px;font-weight:600;display:flex;align-items:center;gap:9px}
+.grp-h .cnt{font-family:"IBM Plex Mono";font-size:12px;color:var(--muted);background:var(--surface-2);
+  border:1px solid var(--border);border-radius:20px;padding:2px 9px;font-variant-numeric:tabular-nums}
+.grp-h .split{margin-left:auto;display:flex;gap:5px;font-size:11px;color:var(--muted);align-items:center}
+.grp-h .split .p{display:inline-flex;align-items:center;gap:4px}
+.grp-h .split .p i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.cat-dot{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+.row{display:grid;grid-template-columns:15px 1.5fr 2fr auto;gap:16px;align-items:center;
+  padding:12px 14px;border:1px solid var(--border);border-radius:11px;background:var(--surface);
+  margin-top:8px;box-shadow:var(--shadow-sm);transition:border-color .12s,transform .12s}
+.row:hover{border-color:var(--border-strong)}
+.row .reg{width:15px;align-self:stretch;border-radius:4px;min-height:38px}
+.row .reg.hk{background:var(--hk)} .row .reg.sg{background:var(--sg)}
+.cell-client{min-width:0}
+.cell-client .client{font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cell-client .meta{display:flex;gap:7px;align-items:center;margin-top:5px;flex-wrap:wrap}
+.envchip{font-family:"IBM Plex Mono";font-size:10.5px;font-weight:500;padding:2px 7px;border-radius:5px;letter-spacing:.01em;white-space:nowrap}
+.envchip.cmn{color:var(--cmn);background:var(--cmn-bg)}
+.envchip.ded{color:var(--ded);background:var(--ded-bg)}
+.envchip.dia{color:var(--dia);background:var(--dia-bg)}
+.envchip.all{color:var(--all);background:var(--all-bg)}
+.ac{font-size:10px;font-weight:600;letter-spacing:.05em;color:var(--muted);border:1px solid var(--border-strong);border-radius:5px;padding:1px 6px}
+.regtag{font-size:10px;font-weight:700;letter-spacing:.06em}
+.regtag.hk{color:var(--hk)} .regtag.sg{color:var(--sg)}
+.cell-proj{color:var(--ink);font-size:13px;min-width:0}
+.cell-proj .owners{color:var(--faint);font-size:11px;margin-top:4px}
+.cell-proj .owners b{color:var(--muted);font-weight:500}
+.warnflag{color:var(--soon);cursor:help;font-weight:700}
+
+.cell-dates{display:flex;flex-direction:column;align-items:flex-end;gap:5px;white-space:nowrap}
+.dpair{display:flex;align-items:center;gap:8px;font-family:"IBM Plex Mono";font-size:12px;font-variant-numeric:tabular-nums}
+.dpair .uat{color:var(--muted)}
+.dpair .arr{color:var(--faint)}
+.dpair .live{font-weight:600;color:var(--ink)}
+.dlab{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:600}
+.status{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:20px}
+.status.pass{color:var(--pass);background:var(--pass-soft)}
+.status.soon{color:var(--soon);background:var(--soon-soft)}
+.status.sched{color:var(--sched);background:var(--sched-soft)}
+.status .d{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+.empty{text-align:center;color:var(--muted);padding:50px 0;font-size:14px}
+
+/* ---- Legend / footer ---- */
+.legend{display:flex;flex-wrap:wrap;gap:14px 26px;margin:30px 0 6px;padding:16px 18px;background:var(--surface);
+  border:1px solid var(--border);border-radius:12px}
+.legend .col{display:flex;flex-direction:column;gap:8px}
+.legend .lh{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:600}
+.legend .it{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.legend .it .sw{width:11px;height:11px;border-radius:3px}
+.envkey{margin:14px 0 6px;padding:17px 20px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.envkey .lh{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:600;display:block;margin-bottom:13px}
+.envkey-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px 26px}
+.envkey-item{display:flex;gap:11px;align-items:flex-start}
+.envkey-item .sw{width:12px;height:12px;border-radius:3px;flex-shrink:0;margin-top:3px}
+.envkey-item .txt b{display:block;font-size:12.5px;color:var(--ink);font-weight:600}
+.envkey-item .txt span{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45}
+@media(max-width:640px){.envkey-grid{grid-template-columns:1fr}}
+.foot{color:var(--faint);font-size:11.5px;text-align:center;padding:22px 0 40px;line-height:1.7}
+.foot b{color:var(--muted);font-weight:600}
+
+@media (max-width:880px){
+  .mast{padding:22px 0 16px}
+  .mast-top{flex-direction:column}
+  .asof{text-align:left}
+  .asof-btns{justify-content:flex-start}
+  .kpis{grid-template-columns:repeat(3,1fr)}
+  .row{grid-template-columns:12px 1fr;gap:8px 12px}
+  .cell-proj{grid-column:2}
+  .cell-dates{grid-column:2;align-items:flex-start}
+  .search{margin-left:0;max-width:none;flex-basis:100%;order:5}
+}
+@media (max-width:520px){
+  .wrap{padding:0 14px}
+  .kpis{grid-template-columns:repeat(2,1fr);gap:9px}
+  .kpi{padding:12px}
+  .kpi .n{font-size:22px}
+  .controls-in{gap:10px 14px}
+  .cgroup{flex-wrap:wrap}
+  .chart{height:158px;gap:5px}
+  .chart-card{padding:16px 14px 10px}
+  .bar-x b{font-size:10.5px}
+  .section-h .hint{display:none}
+  .grp-h{flex-wrap:wrap;row-gap:6px}
+  .grp-h .split{margin-left:0;width:100%}
+  .cell-dates{width:100%}
+  .dpair{font-size:11.5px;gap:6px}
+  .row{padding:11px 12px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="mast">
+    <div class="mast-top">
+      <div>
+        <p class="eyebrow">APAC · UAT &amp; Production Release Pipeline</p>
+        <h1>Hong Kong <span class="amp">&amp;</span> Singapore<br>Release Calendar</h1>
+        <p class="sub">Every scheduled <b>Equity Derivatives (EQD)</b> go-live across the HK and SG desks, on one timeline — grouped by environment, coloured by market.</p>
+      </div>
+      <div class="asof">
+        <div class="lab">Live from sheet · loaded</div>
+        <div class="val mono" id="genDate">—</div>
+        <div class="asof-btns">
+          <button class="theme-btn" id="refreshBtn" style="display:none" aria-label="Refresh from sheet">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 4v5h-5"/></svg>
+            <span>Refresh</span>
+          </button>
+          <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19" stroke-linecap="round"/></svg>
+            <span id="themeTxt">Dark</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="kpis" id="kpis"></div>
+  </header>
+</div>
+
+<div class="controls">
+  <div class="wrap">
+    <div class="controls-in">
+      <div class="cgroup">
+        <span class="clabel">Market</span>
+        <div class="seg" id="regSeg">
+          <button data-reg="all" class="on">All</button>
+          <button data-reg="HK" class="hk"><span class="dot" style="background:var(--hk)"></span>HK</button>
+          <button data-reg="SG" class="sg"><span class="dot" style="background:var(--sg)"></span>SG</button>
+        </div>
+      </div>
+      <div class="cgroup">
+        <span class="clabel">Group by</span>
+        <div class="seg" id="grpSeg">
+          <button data-grp="month" class="on">Month</button>
+          <button data-grp="env">Environment</button>
+        </div>
+      </div>
+      <div class="cgroup" id="catFilters"></div>
+      <div class="search"><input id="q" type="search" placeholder="Search client or project…" autocomplete="off"></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="section-h">
+    <h2>Go-live load by month</h2>
+    <span class="hint">Bar height = number of production go-lives · click a month to filter</span>
+  </div>
+  <div class="chart-card"><div class="chart" id="chart"></div></div>
+
+  <div id="list"></div>
+
+  <div class="legend">
+    <div class="col">
+      <span class="lh">Market</span>
+      <span class="it"><span class="sw" style="background:var(--hk)"></span>Hong Kong desk</span>
+      <span class="it"><span class="sw" style="background:var(--sg)"></span>Singapore desk</span>
+    </div>
+    <div class="col">
+      <span class="lh">Environment</span>
+      <span class="it"><span class="sw" style="background:var(--cmn)"></span>Shared platform · CMN3–CMN7</span>
+      <span class="it"><span class="sw" style="background:var(--ded)"></span>Dedicated client env · SCB, BOCI, BOS…</span>
+      <span class="it"><span class="sw" style="background:var(--dia)"></span>Diamond platform</span>
+      <span class="it"><span class="sw" style="background:var(--all)"></span>Cross-platform · “All” (FIX/API migrations)</span>
+    </div>
+    <div class="col">
+      <span class="lh">Go-live timing (vs today)</span>
+      <span class="it"><span class="status pass"><span class="d"></span>Passed</span> target date already reached</span>
+      <span class="it"><span class="status soon"><span class="d"></span>Next 2 weeks</span> imminent</span>
+      <span class="it"><span class="status sched"><span class="d"></span>Scheduled</span> future window</span>
+    </div>
+  </div>
+
+  <p class="foot">
+    Consolidated from the <b>HK</b> and <b>SG</b> tabs of the APAC release tracker · <b>EQD scope</b> (HK all products; SG EQD only) · <b>78 releases</b> · window <b>Aug 2026 – Jan 2027</b>.<br>
+    UAT → Live shows target dates; <span class="warnflag">⚠</span> marks a row where the UAT target falls after the Live target — worth a check. Dates are targets, not confirmations.
+  </p>
+</div>
+
+<script>
+const TODAY = new Date(); TODAY.setHours(0,0,0,0);
+const MON = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+function pd(s){ if(!s) return null; const p=s.trim().split('-'); if(p.length<3) return null;
+  const d=+p[0], m=MON[p[1]], yy=p[2].length===4?+p[2]:2000+ +p[2]; return new Date(yy,m,d); }
+function fmt(dt){ const M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  return dt.getDate()+" "+M[dt.getMonth()]+(dt.getFullYear()!==2026?" '"+String(dt.getFullYear()).slice(2):""); }
+function envCat(e){ e=e.trim(); if(/^CMN/i.test(e))return"cmn"; if(/^All$/i.test(e))return"all"; if(/Diamond/i.test(e))return"dia"; return"ded"; }
+const CATNAME={cmn:"Shared platform (CMN)",ded:"Dedicated client env",dia:"Diamond platform",all:"Cross-platform (All)"};
+const CATDESC={
+  cmn:"Shared platform — common multi-tenant CMN environments (CMN3–CMN7) shared across several clients",
+  ded:"Dedicated client environment — belongs to one client (SCB, BOCI, BOS, DBS, DB, OCBC, BEA, UBP…)",
+  dia:"Diamond — releases on the shared Diamond product platform",
+  all:"Cross-platform — env “All”: changes that affect every environment (FIX / API migrations)"
+};
+const CATORDER=["cmn","ded","dia","all"];
+
+const RAW = <?!= data ?>;
+
+function buildData(raw){ return raw.map((r,i)=>{
+  const uat=pd(r[5]), live=pd(r[6]);
+  return {id:i, region:r[0], client:r[1], env:r[2], envCat:envCat(r[2]),
+    asset:r[3], project:r[4], uat, live, uatRaw:r[5], liveRaw:r[6],
+    poc:r[7], pune:r[8],
+    monthKey: live.getFullYear()+"-"+String(live.getMonth()).padStart(2,"0"),
+    warn: uat && live && uat>live };
+}); }
+let DATA = buildData(RAW);
+
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function monthLabel(key){ const [y,m]=key.split("-"); return {short:MONTHS[+m], year:y}; }
+function statusOf(d){ const diff=(d.live-TODAY)/86400000;
+  if(diff<0) return "pass"; if(diff<=14) return "soon"; return "sched"; }
+const STLAB={pass:"Passed",soon:"Next 2 wks",sched:"Scheduled"};
+
+let state={reg:"all",grp:"month",cats:new Set(),q:"",month:null};
+
+function filtered(ignoreMonth){
+  return DATA.filter(d=>{
+    if(state.reg!=="all" && d.region!==state.reg) return false;
+    if(state.cats.size && !state.cats.has(d.envCat)) return false;
+    if(state.q){ const t=(d.client+" "+d.project+" "+d.env+" "+d.asset).toLowerCase();
+      if(!t.includes(state.q)) return false; }
+    if(!ignoreMonth && state.month && d.monthKey!==state.month) return false;
+    return true;
+  });
+}
+
+function renderKPIs(){
+  const f=filtered();
+  const hk=f.filter(d=>d.region==="HK").length, sg=f.filter(d=>d.region==="SG").length;
+  const clients=new Set(f.map(d=>d.region+"|"+d.client)).size;
+  const passed=f.filter(d=>statusOf(d)==="pass").length;
+  // peak month
+  const mc={}; f.forEach(d=>mc[d.monthKey]=(mc[d.monthKey]||0)+1);
+  let peak="—",peakN=0; Object.entries(mc).forEach(([k,v])=>{if(v>peakN){peakN=v;peak=k;}});
+  const pl = peak==="—"?"—":monthLabel(peak).short+" "+monthLabel(peak).year;
+  const tot=f.length;
+  const el=document.getElementById("kpis");
+  el.innerHTML=`
+    <div class="kpi"><div class="n mono">${tot}</div><div class="l">Total releases</div>
+      <div class="rail"><span style="width:100%;background:var(--accent)"></span></div></div>
+    <div class="kpi hk"><div class="n mono">${hk}</div><div class="l">Hong Kong</div>
+      <div class="rail"><span style="width:${tot?hk/tot*100:0}%;background:var(--hk)"></span></div></div>
+    <div class="kpi sg"><div class="n mono">${sg}</div><div class="l">Singapore</div>
+      <div class="rail"><span style="width:${tot?sg/tot*100:0}%;background:var(--sg)"></span></div></div>
+    <div class="kpi"><div class="n mono">${clients}</div><div class="l">Distinct clients</div>
+      <div class="rail"><span style="width:100%;background:var(--ded)"></span></div></div>
+    <div class="kpi"><div class="n mono">${passed}</div><div class="l">Go-lives passed</div>
+      <div class="rail"><span style="width:${tot?passed/tot*100:0}%;background:var(--pass)"></span></div></div>
+    <div class="kpi"><div class="n mono" style="font-size:19px;padding-top:4px">${pl}</div><div class="l">Busiest month · ${peakN} go-lives</div>
+      <div class="rail"><span style="width:100%;background:var(--soon)"></span></div></div>`;
+}
+
+function renderChart(){
+  const f=filtered(true); // ignore month filter so all bars stay visible
+  const keys=[...new Set(DATA.map(d=>d.monthKey))].sort();
+  const max=Math.max(1,...keys.map(k=>f.filter(d=>d.monthKey===k).length));
+  const chart=document.getElementById("chart");
+  chart.innerHTML=keys.map(k=>{
+    const rows=f.filter(d=>d.monthKey===k);
+    const hk=rows.filter(d=>d.region==="HK").length, sg=rows.filter(d=>d.region==="SG").length, tot=hk+sg;
+    const ml=monthLabel(k);
+    const pct=tot/max*80;
+    const sel=state.month===k, dim=state.month&&!sel;
+    return `<div class="bar-col ${sel?'sel':''} ${dim?'dim':''}" data-m="${k}">
+      <div class="bar-area">
+        <span class="bar-tot">${tot||''}</span>
+        <div class="bar-stack" style="height:${pct}%">
+          <div class="bar-seg sg" style="height:${tot?sg/tot*100:0}%"></div>
+          <div class="bar-seg hk" style="height:${tot?hk/tot*100:0}%"></div>
+        </div>
+      </div>
+      <span class="bar-x"><b>${ml.short}</b>${ml.year}</span>
+    </div>`;
+  }).join("");
+  chart.querySelectorAll(".bar-col").forEach(c=>c.onclick=()=>{
+    state.month = state.month===c.dataset.m?null:c.dataset.m; renderAll(); });
+}
+
+function rowHTML(d){
+  const st=statusOf(d);
+  return `<div class="row">
+    <div class="reg ${d.region==='HK'?'hk':'sg'}"></div>
+    <div class="cell-client">
+      <div class="client">${d.client}
+        <span class="regtag ${d.region==='HK'?'hk':'sg'}">${d.region}</span></div>
+      <div class="meta">
+        <span class="envchip ${d.envCat}">${d.env}</span>
+        ${d.asset&&d.asset!=='EQD'?`<span class="ac">${d.asset}</span>`:''}
+      </div>
+    </div>
+    <div class="cell-proj">${d.project} ${d.warn?`<span class="warnflag" title="UAT target (${d.uatRaw}) is after Live target (${d.liveRaw}) — check dates">⚠</span>`:''}
+      <div class="owners">Onshore <b>${d.poc}</b> · Pune <b>${d.pune}</b></div>
+    </div>
+    <div class="cell-dates">
+      <div class="dpair"><span class="dlab">UAT</span><span class="uat">${fmt(d.uat)}</span>
+        <span class="arr">→</span><span class="dlab">Live</span><span class="live">${fmt(d.live)}</span></div>
+      <span class="status ${st}"><span class="d"></span>${STLAB[st]}</span>
+    </div>
+  </div>`;
+}
+
+function renderList(){
+  const f=filtered().sort((a,b)=>a.live-b.live || (a.region<b.region?-1:1));
+  const list=document.getElementById("list");
+  if(!f.length){ list.innerHTML=`<p class="empty">No releases match these filters.</p>`; return; }
+  let groups;
+  if(state.grp==="month"){
+    const keys=[...new Set(f.map(d=>d.monthKey))].sort();
+    groups=keys.map(k=>{const ml=monthLabel(k);
+      return {title:`${ml.short} ${ml.year}`, dot:null, rows:f.filter(d=>d.monthKey===k)};});
+  } else {
+    const envs=[...new Set(f.map(d=>d.env))];
+    envs.sort((a,b)=>{
+      const ca=f.filter(d=>d.env===b).length - f.filter(d=>d.env===a).length;
+      return ca!==0?ca:(a<b?-1:1);
+    });
+    groups=envs.map(e=>({title:e, dot:`var(--${envCat(e)})`, rows:f.filter(d=>d.env===e)}));
+  }
+  list.innerHTML=groups.map(g=>{
+    const hk=g.rows.filter(d=>d.region==="HK").length, sg=g.rows.filter(d=>d.region==="SG").length;
+    return `<div class="grp">
+      <div class="grp-h">
+        <span class="title">${g.dot?`<span class="cat-dot" style="background:${g.dot}"></span>`:''}${g.title}</span>
+        <span class="cnt">${g.rows.length}</span>
+        <span class="split">
+          ${hk?`<span class="p"><i style="background:var(--hk)"></i>${hk} HK</span>`:''}
+          ${sg?`<span class="p"><i style="background:var(--sg)"></i>${sg} SG</span>`:''}
+        </span>
+      </div>
+      ${g.rows.map(rowHTML).join("")}
+    </div>`;
+  }).join("");
+}
+
+function renderCatFilters(){
+  const host=document.getElementById("catFilters");
+  const counts={}; DATA.forEach(d=>counts[d.envCat]=(counts[d.envCat]||0)+1);
+  host.innerHTML=`<span class="clabel">Environment</span>`+
+    CATORDER.map(c=>`<button class="chipf ${state.cats.has(c)?'on':''}" data-cat="${c}" title="${CATDESC[c]}">
+      <span class="sw" style="background:var(--${c})"></span>${CATNAME[c].replace(/ \(.*\)/,'')}</button>`).join("");
+  host.querySelectorAll(".chipf").forEach(b=>b.onclick=()=>{
+    const c=b.dataset.cat; state.cats.has(c)?state.cats.delete(c):state.cats.add(c); renderAll(); });
+}
+
+function renderAll(){ renderKPIs(); renderChart(); renderList(); renderCatFilters(); }
+
+// controls
+document.getElementById("regSeg").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+  state.reg=b.dataset.reg;
+  document.querySelectorAll("#regSeg button").forEach(x=>x.classList.toggle("on",x===b));
+  renderAll();
+});
+document.getElementById("grpSeg").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+  state.grp=b.dataset.grp;
+  document.querySelectorAll("#grpSeg button").forEach(x=>x.classList.toggle("on",x===b));
+  renderList();
+});
+document.getElementById("q").oninput=e=>{ state.q=e.target.value.trim().toLowerCase(); renderAll(); };
+
+// theme
+const root=document.documentElement;
+function sysDark(){return window.matchMedia("(prefers-color-scheme: dark)").matches;}
+let dark = sysDark();
+function applyTheme(){ root.setAttribute("data-theme",dark?"dark":"light");
+  document.getElementById("themeTxt").textContent=dark?"Light":"Dark"; }
+document.getElementById("themeBtn").onclick=()=>{dark=!dark;applyTheme();};
+applyTheme();
+
+// Stamp the "loaded" date (only present in the live web-app build)
+(function(){var g=document.getElementById("genDate");if(g){var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];var n=new Date();g.textContent=n.getDate()+" "+M[n.getMonth()]+" "+n.getFullYear();}})();
+
+// Live refresh — only active when the page is served by the Apps Script web app
+(function(){
+  var rb=document.getElementById("refreshBtn");
+  if(typeof google!=="undefined" && google.script && google.script.run){
+    rb.style.display="inline-flex";
+    rb.onclick=function(){
+      var old=rb.querySelector("span").textContent; rb.disabled=true; rb.querySelector("span").textContent="Refreshing…";
+      google.script.run
+        .withSuccessHandler(function(raw){ DATA=buildData(raw); state.month=null; renderAll();
+          var g=document.getElementById("genDate"); if(g){var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];var n=new Date();g.textContent=n.getDate()+" "+M[n.getMonth()]+" "+n.getFullYear();}
+          rb.disabled=false; rb.querySelector("span").textContent=old; })
+        .withFailureHandler(function(){ rb.disabled=false; rb.querySelector("span").textContent="Retry"; })
+        .getReleaseData();
+    };
+  }
+})();
+
+renderAll();
+</script>
+
+</body>
+</html>
