@@ -23,6 +23,16 @@
 var SHEET_ID = '';
 // ────────────────────────────────────────────────────────────────────────────
 
+// ─── CONFIG: which regional tabs to include ─────────────────────────────────
+// Each entry is the prefix of that tab's "POC" column: the HK tab has an
+// "HK POC" column, the SG tab has "SG POC", and so on. To pull in a NEW region
+// — e.g. a Malaysia tab that has a "MY POC" column — just add 'MY' to this list:
+//     var REGIONS = ['HK', 'SG', 'MY'];
+// Tabs whose POC prefix is not listed here are ignored (so India 'BOM',
+// Switzerland 'CH' and UAE 'AE' stay out unless you add them).
+var REGIONS = ['HK', 'SG'];
+// ────────────────────────────────────────────────────────────────────────────
+
 function getSpreadsheet_() {
   return SHEET_ID
     ? SpreadsheetApp.openById(SHEET_ID)
@@ -68,9 +78,12 @@ function getReleaseData() {
     var idx = {};
     headers.forEach(function (h, i) { if (idx[h] === undefined) idx[h] = i; });
 
-    // Region is decided by which POC column the tab has. Only HK & SG are kept.
-    var region = idx['HK POC'] !== undefined ? 'HK'
-               : idx['SG POC'] !== undefined ? 'SG' : null;
+    // Region = the prefix of the "<X> POC" column, for X listed in REGIONS above.
+    // Add a region to REGIONS and its tab is picked up automatically.
+    var region = null;
+    for (var ci = 0; ci < REGIONS.length; ci++) {
+      if (idx[REGIONS[ci] + ' POC'] !== undefined) { region = REGIONS[ci]; break; }
+    }
     if (!region) return;
 
     var cClient = idx['Client'], cEnv = idx['Env'], cProj = idx['Project'],
@@ -83,7 +96,9 @@ function getReleaseData() {
       if (!client) continue;
 
       var asset = cAsset !== undefined ? String(row[cAsset] == null ? '' : row[cAsset]).trim() : '';
-      if (region === 'SG' && asset.toUpperCase().indexOf('EQD') < 0) continue; // EQD scope
+      // Tabs that HAVE an "Asset Class" column are scoped to EQD; tabs without one
+      // (e.g. HK, which is all EQD) keep every row. So a new region works either way.
+      if (cAsset !== undefined && asset.toUpperCase().indexOf('EQD') < 0) continue;
 
       var live = fmtCell(cLive !== undefined ? row[cLive] : '');
       if (!live) continue; // must have a go-live date to sit on the calendar
@@ -92,7 +107,7 @@ function getReleaseData() {
         region,
         client,
         String(row[cEnv] == null ? '' : row[cEnv]).trim(),
-        region === 'HK' ? 'EQD' : asset,
+        cAsset !== undefined ? asset : 'EQD',
         String(row[cProj] == null ? '' : row[cProj]).trim(),
         fmtCell(cUat !== undefined ? row[cUat] : ''),
         live,
