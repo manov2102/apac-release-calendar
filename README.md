@@ -50,6 +50,24 @@ no redeploy needed.
 
 ---
 
+## Adding a new region (e.g. Malaysia)
+
+The app is region-agnostic — HK and SG aren't special-cased. To add a Malaysia desk:
+
+1. Add the **MY tab** to the sheet with the same headers, including an **`MY POC`** column.
+2. In `Code.gs`, add its code to the whitelist:
+   ```javascript
+   var REGIONS = ['HK', 'SG', 'MY'];
+   ```
+3. (Optional, for a nicer label/order/colour in the UI) in `Index.html`, `MY` is already in
+   `REGION_ORDER` and `REGION_NAMES` (→ "Malaysia"). Add any brand-new code there too.
+   Colours come from the `--r0..--r5` CSS variables and are assigned to regions in order.
+4. **Save → Deploy → Manage deployments → New version.**
+
+The new region then appears automatically as its own KPI tile, Market-filter button, chart
+segment colour, row colour, and legend entry. The EQD scope rule also applies automatically:
+tabs that have an `Asset Class` column are filtered to EQD, tabs without one keep every row.
+
 ## Editing from anywhere
 
 This repo is the portable source of truth for the app code. From any device you can edit `Code.gs`
