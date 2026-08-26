@@ -409,7 +409,9 @@ function renderRegSeg(){
 function renderKPIs(){
   const f=filtered();
   const tot=f.length;
-  const buy=f.filter(d=>d.side==="buy").length, sell=f.filter(d=>d.side==="sell").length;
+  const buy=new Set(f.filter(d=>d.side==="buy").map(d=>d.region+"|"+d.client)).size;
+  const sell=new Set(f.filter(d=>d.side==="sell").map(d=>d.region+"|"+d.client)).size;
+  const sideTot=buy+sell;
   const passed=f.filter(d=>statusOf(d)==="pass").length;
   const mc={}; f.forEach(d=>mc[d.monthKey]=(mc[d.monthKey]||0)+1);
   let peak="—",peakN=0; Object.entries(mc).forEach(([k,v])=>{if(v>peakN){peakN=v;peak=k;}});
@@ -419,10 +421,10 @@ function renderKPIs(){
   REGIONS.forEach(r=>{ const c=f.filter(d=>d.region===r).length, col=regColor(r);
     h+=`<div class="kpi"><div class="n mono" style="color:${col}">${c}</div><div class="l">${regName(r)}</div>
       <div class="rail"><span style="width:${tot?c/tot*100:0}%;background:${col}"></span></div></div>`; });
-  h+=`<div class="kpi"><div class="n mono">${buy}</div><div class="l">Buy-side</div>
-      <div class="rail"><span style="width:${tot?buy/tot*100:0}%;background:var(--sched)"></span></div></div>
-    <div class="kpi"><div class="n mono">${sell}</div><div class="l">Sell-side (IB)</div>
-      <div class="rail"><span style="width:${tot?sell/tot*100:0}%;background:var(--dia)"></span></div></div>
+  h+=`<div class="kpi"><div class="n mono">${buy}</div><div class="l">Buy-side clients</div>
+      <div class="rail"><span style="width:${sideTot?buy/sideTot*100:0}%;background:var(--sched)"></span></div></div>
+    <div class="kpi"><div class="n mono">${sell}</div><div class="l">Sell-side clients (IB)</div>
+      <div class="rail"><span style="width:${sideTot?sell/sideTot*100:0}%;background:var(--dia)"></span></div></div>
     <div class="kpi"><div class="n mono">${passed}</div><div class="l">Go-lives passed</div>
       <div class="rail"><span style="width:${tot?passed/tot*100:0}%;background:var(--pass)"></span></div></div>
     <div class="kpi"><div class="n mono" style="font-size:19px;padding-top:4px">${pl}</div><div class="l">Busiest month · ${peakN} go-lives</div>
